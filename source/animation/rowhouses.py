@@ -118,16 +118,40 @@ def shrub(xa,xb,seed):
             d+=f"A{f(r)} {f(r)} 0 1 1 {f(x)} {f(yb+random.uniform(-2,2))}"
     ink(d,'',.35)
 shrub(104,176,1); shrub(204,296,2); shrub(384,476,3)
-ink(wob(6,G,594,G,1.2),'',1.2); ink(wob(6,332,594,332,1.2),'',1)
-ink(''.join(wob(x,G+3,x-6,329,.3) for x in range(40,590,70)),'',.4)
-sketch(f"M6 {G}H594")
-for yy in (118,188,248,86,164): sketch(f"M14 {yy}H586")
+ink(wob(6,G,654,G,1.2),'',1.2); ink(wob(6,332,654,332,1.2),'',1)
+FX,FY,FW,FH=588,146,66,44  # Maryland flag on a pole at the right
+ink(f"M{FX} {G}V{FY-6}",'',1.4); ink(f"M{FX-3} {FY-6}a3 3 0 1 1 6 0a3 3 0 1 1 -6 0",'',.4)
+sketch(f"M{FX} {G}V{FY-6}"); sketch(rectd(FX,FY,FW,FH))
+ink(''.join(wob(x,G+3,x-6,329,.3) for x in range(40,650,70)),'',.4)
+sketch(f"M6 {G}H654")
+for yy in (118,188,248,86,164): sketch(f"M14 {yy}H646")
 
-art=f'''<svg viewBox="0 0 600 340" focusable="false">
+
+def mdflag():
+    """State flag of Maryland: Calvert (gold/black paly with a counterchanged bend) and
+    Crossland (red/white quarterly with a counterchanged bottony cross) quarters."""
+    GOLD,BLK,RED,WHT='#EAAA00','#1B1B1B','#C8102E','#FFFFFF'
+    w,h=FW/2,FH/2; s=['<defs>']
+    s.append(f'<clipPath id="mdBend"><path d="M0 0L{w*.22} 0L{w} {h*.78}L{w} {h}L{w*.78} {h}L0 {h*.22}Z"/></clipPath>')
+    s.append(f'<clipPath id="mdCross"><path d="M{w/2-1.6} 0h3.2v{h/2-1.6}h{w/2-1.6+1.6}v3.2h-{w/2-1.6+1.6}v{h/2-1.6}h-3.2v-{h/2-1.6}h-{w/2-1.6}v-3.2h{w/2-1.6}z"/></clipPath>')
+    def pales(a,b): return ''.join(f'<rect x="{i*w/6:.2f}" y="0" width="{w/6+.05:.2f}" height="{h}" fill="{a if i%2==0 else b}"/>' for i in range(6))
+    s.append(f'<g id="mdCalvert">{pales(GOLD,BLK)}<g clip-path="url(#mdBend)">{pales(BLK,GOLD)}</g></g>')
+    def quarters(a,b): return f'<rect width="{w/2}" height="{h/2}" fill="{a}"/><rect x="{w/2}" width="{w/2}" height="{h/2}" fill="{b}"/><rect y="{h/2}" width="{w/2}" height="{h/2}" fill="{b}"/><rect x="{w/2}" y="{h/2}" width="{w/2}" height="{h/2}" fill="{a}"/>'
+    bot=''.join(f'<circle cx="{x}" cy="{y}" r="1.5"/>' for x,y in [(w/2-1.8,1.2),(w/2+1.8,1.2),(w/2-1.8,h-1.2),(w/2+1.8,h-1.2),(1.2,h/2-1.8),(1.2,h/2+1.8),(w-1.2,h/2-1.8),(w-1.2,h/2+1.8)])
+    s.append(f'<clipPath id="mdBot">{bot}</clipPath>')
+    s.append(f'<g id="mdCrossland">{quarters(WHT,RED)}<g clip-path="url(#mdCross)">{quarters(RED,WHT)}</g><g clip-path="url(#mdBot)">{quarters(RED,WHT)}</g></g>')
+    s.append(f'<g id="mdFlag"><use href="#mdCalvert"/><use href="#mdCrossland" x="{w}"/><use href="#mdCrossland" y="{h}"/><use href="#mdCalvert" x="{w}" y="{h}"/><rect width="{FW}" height="{FH}" fill="none" stroke="#fff" stroke-width=".8"/></g>')
+    N=15; s.append(''.join(f'<clipPath id="mdS{i}"><rect x="{i*FW/N-.3:.2f}" y="-2" width="{FW/N+.6:.2f}" height="{FH+4}"/></clipPath>' for i in range(N)))
+    s.append('</defs>')
+    sl=''.join(f'<g class="fslice" data-i="{i}" data-n="{N}"><use href="#mdFlag" clip-path="url(#mdS{i})"/></g>' for i in range(N))
+    return ''.join(s)+f'<g id="ldrFlag" transform="translate({FX},{FY}) scale(0,1)">{sl}</g>'
+
+art=f'''<svg viewBox="0 0 660 340" focusable="false">
+  {mdflag()}
   <g class="sketch" id="ldrSketch">{''.join(sk)}</g>
   <g id="ldrInk">{''.join(out)}</g>
   <!-- lawn flamingo (Hampden), rises out of the shrubs -->
-  <clipPath id="abvGround"><rect x="0" y="0" width="600" height="{G}"/></clipPath>
+  <clipPath id="abvGround"><rect x="0" y="0" width="660" height="{G}"/></clipPath>
   <g clip-path="url(#abvGround)"><g id="ldrFlamingo" transform="translate(0,60)">
     <path d="M176 {G}V292M181 {G}V294" stroke="#F2938C" stroke-width="1.6" fill="none"/>
     <path d="M166 282c2-9 20-11 26-2-4 9-22 10-26 2z" fill="#F2938C" stroke="#fff" stroke-width="1"/>

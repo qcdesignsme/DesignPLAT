@@ -219,7 +219,7 @@ dialog .close{position:absolute;top:8px;right:8px}
 
 <div class="hero">
   <div class="anim-col">
-    <div class="ldr" id="ldr" role="img" aria-label="Animation: a faint pencil sketch of three Baltimore rowhouses is inked in line by line, down to the brick, the arched windows and the white marble stoops. Then the windows light up, a pink lawn flamingo pops up from the shrubs, a crab scuttles onto the sidewalk, and an oriole lands on the cornice and sings.">
+    <div class="ldr" id="ldr" role="img" aria-label="Animation: a faint pencil sketch of three Baltimore rowhouses is inked in line by line, down to the brick, the arched windows and the white marble stoops. Then the windows light up, a pink lawn flamingo pops up from the shrubs, a crab scuttles onto the sidewalk, and an oriole lands on the cornice and sings, while a Maryland flag unfurls and waves from a pole on the right.">
       <div aria-hidden="true">{{STAGE}}</div>
     </div>
     <div class="ldr-ctls" role="group" aria-label="Animation controls">
@@ -486,7 +486,7 @@ dialog .close{position:absolute;top:8px;right:8px}
 (function(){
   var root=document.getElementById('ldr'), svg=root.querySelector('svg');
   var $=function(id){return document.getElementById(id);};
-  var INK0=.6, INK_D=6.4, INK_END=INK0+INK_D, LIGHTS=INK_END+.25, FLAM=LIGHTS+.3, CRAB=FLAM+.5, ORI=CRAB+.4, END=ORI+2.6;
+  var INK0=.6, INK_D=6.4, INK_END=INK0+INK_D, FLAG=INK_END+.1, LIGHTS=INK_END+.45, FLAM=LIGHTS+.3, CRAB=FLAM+.5, ORI=CRAB+.4, END=ORI+2.6;
   var tot=0, strokes=[].map.call(svg.querySelectorAll('.ink'),function(p){
     var L=p.getTotalLength(), d=L*(+p.dataset.w||1); tot+=d;
     p.style.strokeDasharray=L+' '+L; return {p:p,L:L,d:d,last:-1};
@@ -495,7 +495,7 @@ dialog .close{position:absolute;top:8px;right:8px}
   var glass=[].slice.call(svg.querySelectorAll('.glass')), marble=[].slice.call(svg.querySelectorAll('.marble'));
   var delays=glass.map(function(g,i){return ((i*7)%11)/11*.9;});
   var sketch=$('ldrSketch'), pencil=$('ldrPencil'), flam=$('ldrFlamingo'), crab=$('ldrCrab'), crabB=$('ldrCrabBody'),
-      clawL=$('ldrClawL'), clawR=$('ldrClawR'), ori=$('ldrOriole'), oriB=$('ldrOrioleBody'), wing=$('ldrWing'), note=$('ldrNote');
+      clawL=$('ldrClawL'), flag=$('ldrFlag'), slices=[].slice.call(svg.querySelectorAll('.fslice')), clawR=$('ldrClawR'), ori=$('ldrOriole'), oriB=$('ldrOrioleBody'), wing=$('ldrWing'), note=$('ldrNote');
   var cl=function(v){return v<0?0:v>1?1:v;}, ease=function(v){return v*v*(3-2*v);}, out=function(v){return 1-(1-v)*(1-v);};
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   var wanted=!reduce, visible=false, running=false, done=false, t0=null, tP=0, raf;
@@ -513,6 +513,9 @@ dialog .close{position:absolute;top:8px;right:8px}
     sketch.setAttribute('opacity',(1-ease(cl((t-INK0-INK_D*.55)/(INK_D*.45)))).toFixed(3));
     glass.forEach(function(g,i){g.style.fillOpacity=(.85*ease(cl((t-LIGHTS-delays[i])/.3))).toFixed(3);});
     marble.forEach(function(m){m.style.fillOpacity=(.9*ease(cl((t-LIGHTS)/.5))).toFixed(3);});
+    var fu=out(cl((t-FLAG)/.6)), amp=fu*2.6;
+    flag.setAttribute('transform','translate(588,146) scale('+fu.toFixed(3)+',1)');
+    slices.forEach(function(s,i){var k=i/slices.length;s.setAttribute('transform','translate(0,'+(amp*k*Math.sin(t*5.5-i*.55)).toFixed(2)+')');});
     var f=cl((t-FLAM)/.55), fw=t>FLAM+.55?Math.sin((t-FLAM-.55)*9)*6*Math.max(0,1-(t-FLAM-.55)/1.2):0;
     flam.setAttribute('transform','translate(0,'+(60*(1-out(f))).toFixed(1)+') rotate('+fw.toFixed(1)+' 178 312)');
     var c=cl((t-CRAB)/1.1), walking=c>0&&c<1;
