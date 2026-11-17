@@ -32,6 +32,15 @@ The hero is an original pen-and-ink drawing of three Baltimore rowhouses, drawn 
 - The timeline lives in the "hero animation" script at the end of `template.html`. It plays once and has Play/Replay and Pause buttons. With reduced motion it shows the finished drawing.
 - `logos.json`, `logos/`, `loader-*.src.html` and the capture scripts are from the earlier logo-and-character animation. They are no longer used on the page but are kept for reuse.
 
+## Figma file
+
+Design source for this version: "Qian Chen for Maryland PLAT" (https://www.figma.com/design/kLLEtX2Rnyq3rIrj5cYAvK). Its variables are in three collections:
+- **Maryland brand:** every Maryland Web Design System theme color, as primitives.
+- **Color:** the same semantic names as the Think of Us file, each pointing to a Maryland brand color.
+- **Spacing:** spacing, radius and size values.
+
+`source/animation/rowhouses-static.svg` is the last frame of the hero animation as a flat SVG you can drop into Figma.
+
 ## Reading the Figma file: `source/figma-tools/`
 
 Node scripts that read a `.fig` file without Figma (unzip it first; it contains `canvas.fig` and `images/`). Install with `npm install` (kiwi-schema, pako, fzstd).
