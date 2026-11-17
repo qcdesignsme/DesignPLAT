@@ -26,12 +26,11 @@ Content that is not in `build.py` (hero card, work cards, role map, quotes, lett
 
 ## Hero animation: `source/animation/`
 
-- `logos.json`: the four round logos (Mentor Collective, USDA, VA, and `md`, a PLAT badge drawn in Maryland design system colors; not an official logo) as base64 PNG data URIs. `{{LOGOS}}` in the page comes from here.
-- `logos/`: the same four logos as 256px transparent PNGs.
-- `loader-loop.src.html` and `loader-wave.src.html`: the standalone looping animations (the wave version stops, turns, waves, runs off). They contain `{{mc}}`-style placeholders filled from `logos.json`.
-- `crop.py`, `cap.py`, `capw.py`, `mkgif.py`, `mkgifw.py`: one-off scripts used to cut the logo circles and export transparent GIF/PNG versions (Playwright + Pillow). They have absolute paths from the original workspace; adjust before reuse.
+The hero is an original pen-and-ink drawing of three Baltimore rowhouses, drawn as an SVG.
 
-The version on the page plays once, ends on the wave, and has round Play/Replay and Pause buttons (32px, labelled for screen readers); see the "hero animation" script at the end of `template.html`. To swap the last logo for another company, replace `md` in `logos.json` and its label in `stage.html`.
+- `rowhouses.py`: generates `source/page/stage.html` (the SVG). Strokes with class `ink` are drawn in order by a pencil, with brick hatching drawn in quick sweeps. `sk` is the faint dashed sketch the animation starts from. `glass` (windows) and `marble` (stoops) fill in at the end. Then a lawn flamingo pops up, a crab scuttles in and an oriole lands on the cornice. Run `python3 source/animation/rowhouses.py` and then rebuild the page.
+- The timeline lives in the "hero animation" script at the end of `template.html`. It plays once and has Play/Replay and Pause buttons. With reduced motion it shows the finished drawing.
+- `logos.json`, `logos/`, `loader-*.src.html` and the capture scripts are from the earlier logo-and-character animation. They are no longer used on the page but are kept for reuse.
 
 ## Reading the Figma file: `source/figma-tools/`
 
