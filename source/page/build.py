@@ -11,7 +11,7 @@ needs = [
   "why":[["Mentor Collective","Using data from 100+ participants over 14 studies, I mapped first-time journeys for mentors and mentees from recruitment to program end, covering thinking, feeling, pain points, touchpoints and improvements."],
          ["Mentor Collective","Point of failure: my analysis uncovered a widespread ghosting issue, so I created two more journeys for the ghosted mentor and the ghosting mentee."],
          ["farmers.gov","Found an upstream bottleneck: by interviewing field and program staff, I learned why producers arrived at conservation visits unprepared, before any screen was involved."]],
-  "embed":{"src":"https://qcdesignsme.github.io/mentorship-journey/","title":"Interactive mentorship journey map, Mentor Collective","poster":"img/journeys.jpg","posterAlt":"The first-year mentorship journey map for mentors and mentees, with a section on what happens when a relationship goes quiet","cap":"Live journey map built from 14 studies (~100 participants). Explore it here."}},
+  "embed":{"src":"https://qcdesignsme.github.io/mentorship-journey/","title":"Interactive mentorship journey map, Mentor Collective","poster":"img/journeys.jpg","posterAlt":"The first-year mentorship journey map for mentors and mentees, with a section on what happens when a relationship goes quiet","cap":"Live journey map built from 14 studies (~100 participants). Explore it here.","live":True,"pdf":"docs/mentorship-journey-map.pdf"}},
  {"name":"Research with applicants and agency staff","listPill":"Strong","panelPill":"Strong match",
   "title":"I research with the people who apply and the staff who review",
   "quote":"Design and facilitate user-experience engagements (interviews, surveys, usability tests) with applicants and agency staff.",
@@ -41,7 +41,7 @@ t = t.replace('{{LOGOS}}', json.dumps(logos))
 t = t.replace('{{NEEDS}}', json.dumps(needs, ensure_ascii=False).replace('</', '<\\/'))
 open(P(ROOT,'index.html'),'w').write(t)
 # self-contained build: inline the images
-s = t.replace('"src": "prototype/"','"src": "https://qcdesignsme.github.io/DesignPLAT/prototype/"').replace('"href": "prototype/"','"href": "https://qcdesignsme.github.io/DesignPLAT/prototype/"')
+s = t.replace('"pdf": "docs/','"pdf": "https://qcdesignsme.github.io/DesignPLAT/docs/').replace('"src": "prototype/"','"src": "https://qcdesignsme.github.io/DesignPLAT/prototype/"').replace('"href": "prototype/"','"href": "https://qcdesignsme.github.io/DesignPLAT/prototype/"')
 for name in ['journeys','admin-flow','handoff','workflow']:
     b = base64.b64encode(open(P(ROOT,'img',f'{name}.jpg'),'rb').read()).decode()
     s = s.replace(f'img/{name}.jpg', 'data:image/jpeg;base64,'+b)

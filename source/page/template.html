@@ -118,6 +118,9 @@ figcaption,.caption{font-size:13px;line-height:1.4;color:var(--muted)}
 .embed .cap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
 .embed .cap a{font-weight:500;color:var(--text)}
 @media (max-width:760px){.embed iframe{display:none}.embed .poster{display:block}}
+/* the journey map stays interactive on small screens too */
+@media (max-width:760px){.embed.live iframe{display:block;height:560px}.embed.live .poster{display:none}}
+.embed .cap-links{display:flex;gap:16px;flex-wrap:wrap}
 /* 0781 flow */
 .flow{background:var(--bg-subtle);border-radius:8px;padding:16px;display:grid;gap:12px}
 .flow .note{font-size:13px;color:var(--muted)}
@@ -297,33 +300,6 @@ dialog .close{position:absolute;top:8px;right:8px}
   </div>
 </section>
 
-<section id="carries">
-  <div class="sec-head">
-    <h2>🔁 I've worked in systems shaped like Maryland permitting</h2>
-    <p class="lede">Each of these had people applying for something they need, staff who review and deliver it, rules and systems that route the request, and a public organization accountable for the outcome.</p>
-  </div>
-  <div class="rolemap">
-    <div><h3>Mentor Collective</h3><ul>
-      <li>Mentees<span>first-year students, often first-gen</span></li>
-      <li>Program managers<span>configure and deliver support content</span></li>
-      <li>Matching algorithm<span>pairs mentors and mentees</span></li>
-      <li>Partner institutions<span>180+ colleges tracking outcomes</span></li>
-    </ul></div>
-    <div><h3>VA.gov and farmers.gov</h3><ul>
-      <li>Veterans filing claims<span>including PTSD and MST-related</span></li>
-      <li>Conservation staff<span>prepare producers for visits (USDA)</span></li>
-      <li>Form logic<span>optional sections, evidence routing</span></li>
-      <li>Federal programs<span>VA and USDA, accountable for outcomes</span></li>
-    </ul></div>
-    <div class="cm"><h3>Maryland PLAT</h3><ul>
-      <li>Applicants<span>residents, builders and businesses, housing first</span></li>
-      <li>Agency and county reviewers<span>state agencies and local jurisdictions</span></li>
-      <li>Rules and OneStop<span>regulatory requirements, built with DoIT</span></li>
-      <li>Governor's Office<span>accountable for faster, clearer permits</span></li>
-    </ul></div>
-  </div>
-</section>
-
 <section id="voices">
   <div class="sec-head"><h2>💬 From people I've worked with</h2></div>
   <div class="quotes">
@@ -427,9 +403,10 @@ dialog .close{position:absolute;top:8px;right:8px}
   }
   function embed(e){
     if(!e) return '';
-    return '<figure class="embed"><iframe src="'+esc(e.src)+'" title="'+esc(e.title)+'" loading="lazy"></iframe>'+
+    return '<figure class="embed'+(e.live?' live':'')+'"><iframe src="'+esc(e.src)+'" title="'+esc(e.title)+'" loading="lazy"></iframe>'+
       '<div class="poster frame"><img src="'+esc(e.poster)+'" alt="'+esc(e.posterAlt)+'" loading="lazy"></div>'+
-      '<figcaption class="cap"><span>'+esc(e.cap)+'</span><a href="'+esc(e.src)+'" target="_blank" rel="noopener">Open full screen<span class="sr"> (opens in a new tab)</span> ↗</a></figcaption></figure>';
+      '<figcaption class="cap"><span>'+esc(e.cap)+'</span><span class="cap-links"><a href="'+esc(e.src)+'" target="_blank" rel="noopener">Open full screen<span class="sr"> (opens in a new tab)</span> ↗</a>'+
+      (e.pdf?'<a href="'+esc(e.pdf)+'" download target="_blank" rel="noopener">Download the journey map (PDF)</a>':'')+'</span></figcaption></figure>';
   }
   function btns(b){
     if(!b||!b.length) return '';

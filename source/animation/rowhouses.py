@@ -117,7 +117,6 @@ def shrub(xa,xb,seed):
             r=random.uniform(4,7); dx=random.uniform(5,8); x+=dx
             d+=f"A{f(r)} {f(r)} 0 1 1 {f(x)} {f(yb+random.uniform(-2,2))}"
     ink(d,'',.35)
-shrub(104,176,1); shrub(204,296,2); shrub(384,476,3)
 ink(wob(6,G,654,G,1.2),'',1.2); ink(wob(6,332,654,332,1.2),'',1)
 FX,FY,FW,FH=588,146,66,44  # Maryland flag on a pole at the right
 ink(f"M{FX} {G}V{FY-6}",'',1.4); ink(f"M{FX-3} {FY-6}a3 3 0 1 1 6 0a3 3 0 1 1 -6 0",'',.4)
