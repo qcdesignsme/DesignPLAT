@@ -28,7 +28,7 @@ Content that is not in `build.py` (hero card, work cards, role map, quotes, lett
 
 The hero is an original pen-and-ink drawing of three Baltimore rowhouses, drawn as an SVG.
 
-- `rowhouses.py`: generates `source/page/stage.html` (the SVG). Strokes with class `ink` are drawn in order by a pencil, with brick hatching drawn in quick sweeps. `sk` is the faint dashed sketch the animation starts from. `glass` (windows) and `marble` (stoops) fill in at the end. Then a lawn flamingo pops up, a crab scuttles in and an oriole lands on the cornice. Run `python3 source/animation/rowhouses.py` and then rebuild the page.
+- `rowhouses.py`: generates `source/page/stage.html` (the SVG). Strokes with class `ink` are drawn many at a time in about 3 seconds. `sk` is the faint dashed sketch the animation starts from. `glass` (windows) and `marble` (stoops) fill in at the end. Then a lawn flamingo pops up, a crab scuttles in and an oriole lands on the cornice. Run `python3 source/animation/rowhouses.py` and then rebuild the page.
 - The timeline lives in the "hero animation" script at the end of `template.html`. It plays once and has Play/Replay and Pause buttons. With reduced motion it shows the finished drawing.
 - `logos.json`, `logos/`, `loader-*.src.html` and the capture scripts are from the earlier logo-and-character animation. They are no longer used on the page but are kept for reuse.
 

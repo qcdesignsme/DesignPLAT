@@ -71,7 +71,7 @@ section{padding:48px 0}
 .ldr-ctl:focus-visible{outline:3px solid var(--md-gold-light);outline-offset:2px;border-radius:50%}
 .ldr-ctl:disabled{opacity:.35;cursor:default}
 
-/* hero animation: pen-and-ink Baltimore rowhouses drawn in by a pencil, then a flamingo, a crab and an oriole */
+/* hero animation: pen-and-ink Baltimore rowhouses drawn in many lines at a time, then a flamingo, a crab and an oriole */
 .ldr{position:relative;width:100%;overflow:hidden}
 .ldr svg{display:block;width:100%;height:auto}
 .ldr .ink,.ldr .sk{fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:1.5}
@@ -219,7 +219,7 @@ dialog .close{position:absolute;top:8px;right:8px}
 
 <div class="hero">
   <div class="anim-col">
-    <div class="ldr" id="ldr" role="img" aria-label="Animation: a faint pencil sketch of three Baltimore rowhouses is inked in line by line, down to the brick, the arched windows and the white marble stoops. Then the windows light up, a pink lawn flamingo pops up from the shrubs, a crab scuttles onto the sidewalk, and an oriole lands on the cornice and sings, while a Maryland flag unfurls and waves from a pole on the right.">
+    <div class="ldr" id="ldr" role="img" aria-label="Animation: a faint pencil sketch of three Baltimore rowhouses is quickly inked in, down to the brick, the arched windows and the white marble stoops. Then the windows light up, a pink lawn flamingo pops up from the shrubs, a crab scuttles onto the sidewalk, and an oriole lands on the cornice and sings, while a Maryland flag unfurls and waves from a pole on the right.">
       <div aria-hidden="true">{{STAGE}}</div>
     </div>
     <div class="ldr-ctls" role="group" aria-label="Animation controls">
@@ -289,7 +289,7 @@ dialog .close{position:absolute;top:8px;right:8px}
   <div class="chapter">Why I'm a fit</div>
   <div class="sec-head">
     <h2>🧭 Your requirements, matched to my evidence</h2>
-    <p class="lede">I set this up the way I'd set up a service blueprint: each requirement from the posting, the evidence behind it, and where it came from. Where my evidence is partial, I say so and show how I'd close the gap.</p>
+    <p class="lede">I set this up the way I'd set up a service blueprint: each requirement from the posting, the evidence behind it, and where it came from.</p>
   </div>
   <div class="matcher">
     <div class="needs" role="tablist" aria-label="PLAT requirements" aria-orientation="vertical" id="needs"></div>
@@ -366,7 +366,7 @@ dialog .close{position:absolute;top:8px;right:8px}
   </div>
 </section>
 
-<footer class="page">Project details summarize my own work and team research reports. Screens and maps come from my own case studies. The plain-language concept in the match section was made for this application with example data; it is not a State of Maryland or OneStop screen. Colors follow the Maryland Web Design System palette; the PLAT badge in the animation is my own illustration, not an official logo.</footer>
+<footer class="page">Project details summarize my own work and team research reports. Screens and maps come from my own case studies. Colors follow the Maryland Web Design System palette; the PLAT badge in the animation is my own illustration, not an official logo.</footer>
 </main>
 
 <dialog id="lb" aria-label="Enlarged image">
@@ -433,7 +433,7 @@ dialog .close{position:absolute;top:8px;right:8px}
   }
   function btns(b){
     if(!b||!b.length) return '';
-    return '<div class="btns">'+b.map(function(x,i){return '<a class="btn'+(i===0?' solid':'')+'" href="'+esc(x.href)+'"'+(x.todo?' aria-disabled="true" title="Link to be added"':'')+'>'+esc(x.label)+'</a>';}).join('')+'</div>';
+    return '<div class="btns">'+b.map(function(x,i){return '<a class="btn'+(i===0?' solid':'')+'" href="'+esc(x.href)+'"'+(x.todo?' aria-disabled="true" title="Link to be added"':' target="_blank" rel="noopener"')+'>'+esc(x.label)+(x.todo?'':'<span class="sr"> (opens in a new tab)</span>')+'</a>';}).join('')+'</div>';
   }
   needs.forEach(function(n,i){
     var b=document.createElement('button');
@@ -488,50 +488,45 @@ dialog .close{position:absolute;top:8px;right:8px}
 (function(){
   var root=document.getElementById('ldr'), svg=root.querySelector('svg');
   var $=function(id){return document.getElementById(id);};
-  var INK0=.6, INK_D=6.4, INK_END=INK0+INK_D, FLAG=INK_END+.1, LIGHTS=INK_END+.45, FLAM=LIGHTS+.3, CRAB=FLAM+.5, ORI=CRAB+.4, END=ORI+2.6;
+  var INK0=.25, INK_D=3, INK_END=INK0+INK_D, FLAG=INK_END+.05, LIGHTS=INK_END+.2, FLAM=LIGHTS+.15, CRAB=FLAM+.25, ORI=CRAB+.2, END=ORI+1.4;
   var tot=0, strokes=[].map.call(svg.querySelectorAll('.ink'),function(p){
     var L=p.getTotalLength(), d=L*(+p.dataset.w||1); tot+=d;
     p.style.strokeDasharray=L+' '+L; return {p:p,L:L,d:d,last:-1};
   });
-  var acc=0; strokes.forEach(function(o){o.s=INK0+acc/tot*INK_D; acc+=o.d; o.e=INK0+acc/tot*INK_D;});
+  /* many lines draw at once: starts are spread across the drawing window and each stroke takes 0.3-0.7s */
+  var acc=0; strokes.forEach(function(o){o.s=INK0+acc/tot*(INK_D-.7); acc+=o.d; o.e=o.s+.3+.4*Math.min(1,o.L/200);});
   var glass=[].slice.call(svg.querySelectorAll('.glass')), marble=[].slice.call(svg.querySelectorAll('.marble'));
-  var delays=glass.map(function(g,i){return ((i*7)%11)/11*.9;});
-  var sketch=$('ldrSketch'), pencil=$('ldrPencil'), flam=$('ldrFlamingo'), crab=$('ldrCrab'), crabB=$('ldrCrabBody'),
+  var delays=glass.map(function(g,i){return ((i*7)%11)/11*.45;});
+  var sketch=$('ldrSketch'), flam=$('ldrFlamingo'), crab=$('ldrCrab'), crabB=$('ldrCrabBody'),
       clawL=$('ldrClawL'), flag=$('ldrFlag'), slices=[].slice.call(svg.querySelectorAll('.fslice')), clawR=$('ldrClawR'), ori=$('ldrOriole'), oriB=$('ldrOrioleBody'), wing=$('ldrWing'), note=$('ldrNote');
   var cl=function(v){return v<0?0:v>1?1:v;}, ease=function(v){return v*v*(3-2*v);}, out=function(v){return 1-(1-v)*(1-v);};
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   var wanted=!reduce, visible=false, running=false, done=false, t0=null, tP=0, raf;
   var playBtn=$('ldrPlay'), pauseBtn=$('ldrPause');
   function render(t){
-    var cur=null,cq=0;
     for(var i=0;i<strokes.length;i++){var o=strokes[i];
-      var q=t<=o.s?0:t>=o.e?1:(t-o.s)/(o.e-o.s);
-      if(q!==o.last){o.p.style.strokeDashoffset=o.L*(1-q);o.last=q;}
-      if(q>0&&q<1&&!cur){cur=o;cq=q;}}
-    var pt=cur?cur.p.getPointAtLength(cur.L*cq):(t<INK0?strokes[0].p.getPointAtLength(0):null);
-    if(pt)pencil.setAttribute('transform','translate('+pt.x.toFixed(1)+','+pt.y.toFixed(1)+')');
-    pencil.setAttribute('opacity',t<INK0?cl(t/.3):t<INK_END?1:cl(1-(t-INK_END)/.35));
-    if(!pt&&t>=INK_END)pencil.setAttribute('transform','translate(560,250)');
+      var q=t<=o.s?0:t>=o.e?1:out((t-o.s)/(o.e-o.s));
+      if(q!==o.last){o.p.style.strokeDashoffset=o.L*(1-q);o.last=q;}}
     sketch.setAttribute('opacity',(1-ease(cl((t-INK0-INK_D*.55)/(INK_D*.45)))).toFixed(3));
-    glass.forEach(function(g,i){g.style.fillOpacity=(.85*ease(cl((t-LIGHTS-delays[i])/.3))).toFixed(3);});
-    marble.forEach(function(m){m.style.fillOpacity=(.9*ease(cl((t-LIGHTS)/.5))).toFixed(3);});
-    var fu=out(cl((t-FLAG)/.6)), amp=fu*2.6;
+    glass.forEach(function(g,i){g.style.fillOpacity=(.85*ease(cl((t-LIGHTS-delays[i])/.15))).toFixed(3);});
+    marble.forEach(function(m){m.style.fillOpacity=(.9*ease(cl((t-LIGHTS)/.25))).toFixed(3);});
+    var fu=out(cl((t-FLAG)/.35)), amp=fu*2.6;
     flag.setAttribute('transform','translate(588,146) scale('+fu.toFixed(3)+',1)');
     slices.forEach(function(s,i){var k=i/slices.length;s.setAttribute('transform','translate(0,'+(amp*k*Math.sin(t*5.5-i*.55)).toFixed(2)+')');});
-    var f=cl((t-FLAM)/.55), fw=t>FLAM+.55?Math.sin((t-FLAM-.55)*9)*6*Math.max(0,1-(t-FLAM-.55)/1.2):0;
+    var f=cl((t-FLAM)/.3), fw=t>FLAM+.3?Math.sin((t-FLAM-.3)*18)*6*Math.max(0,1-(t-FLAM-.3)/.6):0;
     flam.setAttribute('transform','translate(0,'+(60*(1-out(f))).toFixed(1)+') rotate('+fw.toFixed(1)+' 178 312)');
-    var c=cl((t-CRAB)/1.1), walking=c>0&&c<1;
-    crab.setAttribute('transform','translate('+(220*(1-out(c))).toFixed(1)+',0)');
-    crabB.setAttribute('transform','translate(0,'+(walking?Math.abs(Math.sin(t*28))*-1.6:0).toFixed(2)+')');
-    var snap=c>=1?Math.sin((t-CRAB-1.1)*14)*14*Math.max(0,1-(t-CRAB-1.1)/1.4):0;
+    var c=cl((t-CRAB)/.55), walking=c>0&&c<1;
+    crab.setAttribute('transform','translate('+(260*(1-out(c))).toFixed(1)+',0)');
+    crabB.setAttribute('transform','translate(0,'+(walking?Math.abs(Math.sin(t*56))*-1.6:0).toFixed(2)+')');
+    var snap=c>=1?Math.sin((t-CRAB-.55)*28)*14*Math.max(0,1-(t-CRAB-.55)/.7):0;
     clawL.setAttribute('transform','rotate('+(-snap).toFixed(1)+' 456 320)'); clawR.setAttribute('transform','rotate('+snap.toFixed(1)+' 480 320)');
-    var b=cl((t-ORI)/1.3), u=out(b), ox=340*(1-u), oy=-80*(1-u)+(-50*Math.sin(Math.PI*u))*(1-u);
-    var landed=t-ORI-1.3, hop=landed>.5&&landed<.8?-4*Math.sin((landed-.5)/.3*Math.PI):0;
+    var b=cl((t-ORI)/.7), u=out(b), ox=340*(1-u), oy=-80*(1-u)+(-50*Math.sin(Math.PI*u))*(1-u);
+    var landed=t-ORI-.7, hop=landed>.25&&landed<.4?-4*Math.sin((landed-.25)/.15*Math.PI):0;
     ori.setAttribute('transform','translate('+ox.toFixed(1)+','+(oy+hop).toFixed(1)+')');
-    oriB.setAttribute('transform',landed>0?'rotate('+(Math.sin(landed*10)*5*Math.max(0,1-landed)).toFixed(1)+' 300 40)':'');
+    oriB.setAttribute('transform',landed>0?'rotate('+(Math.sin(landed*20)*5*Math.max(0,1-landed*2)).toFixed(1)+' 300 40)':'');
     wing.setAttribute('transform',b>0&&b<1?'rotate('+(Math.sin(t*34)*40).toFixed(1)+' 298 29)':'');
-    note.setAttribute('opacity',landed>.7?cl(1-(landed-1.6)/.6).toFixed(2):0);
-    note.setAttribute('transform','translate(0,'+(landed>.7?-(landed-.7)*8:0).toFixed(1)+')');
+    note.setAttribute('opacity',landed>.35?cl(1-(landed-.8)/.3).toFixed(2):0);
+    note.setAttribute('transform','translate(0,'+(landed>.35?-(landed-.35)*16:0).toFixed(1)+')');
   }
   function frame(now){
     if(t0===null)t0=now-tP*1000;

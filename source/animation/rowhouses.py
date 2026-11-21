@@ -1,5 +1,5 @@
 """Generates source/page/stage.html: an original pen-and-ink drawing of three Baltimore
-rowhouses (SVG), plus a flamingo, a crab, an oriole and a pencil. Run from the repo root:
+rowhouses (SVG), plus a flamingo, a crab, and an oriole. Run from the repo root:
     python3 source/animation/rowhouses.py && python3 source/page/build.py
 Strokes with class "ink" are drawn in order by the hero script; "sk" is the faint sketch layer."""
 import random, math, os
@@ -161,7 +161,7 @@ art=f'''<svg viewBox="0 0 660 340" focusable="false">
     <circle cx="176.6" cy="259" r=".8" fill="#1B1B1B"/>
   </g></g>
   <!-- blue crab, steamed -->
-  <g id="ldrCrab" transform="translate(220,0)"><g id="ldrCrabBody"><g transform="translate(468 323) scale(1.2) translate(-468 -323)">
+  <g id="ldrCrab" transform="translate(260,0)"><g id="ldrCrabBody"><g transform="translate(468 323) scale(1.2) translate(-468 -323)">
     <path d="M454 324l-7 4M455 327l-7 5M457 329l-5 6M482 324l7 4M481 327l7 5M479 329l5 6" stroke="#D54309" stroke-width="2" stroke-linecap="round"/>
     <ellipse cx="468" cy="323" rx="14" ry="7.5" fill="#D54309" stroke="#fff" stroke-width="1"/>
     <path d="M463 317v-4M473 317v-4" stroke="#fff" stroke-width="1.2"/><circle cx="463" cy="312" r="1.6" fill="#1B1B1B" stroke="#fff" stroke-width=".7"/><circle cx="473" cy="312" r="1.6" fill="#1B1B1B" stroke="#fff" stroke-width=".7"/>
@@ -179,12 +179,6 @@ art=f'''<svg viewBox="0 0 660 340" focusable="false">
     <path id="ldrWing" d="M297 28c-6-2-10 1-11 4 5 1 10 0 12-2z" fill="#1B1B1B" stroke="#fff" stroke-width=".8"/>
   </g></g>
   <text id="ldrNote" x="330" y="22" fill="#FFBE2E" font-size="13" opacity="0">♪</text></g>
-  <!-- the pencil that draws -->
-  <g id="ldrPencil" opacity="0"><g transform="rotate(-35)">
-    <path d="M0 0l-3-9h6z" fill="#F3CFAE"/><path d="M0 0l-1-3h2z" fill="#fff"/>
-    <rect x="-3" y="-44" width="6" height="35" fill="#FFBE2E" stroke="#5C410A" stroke-width=".6"/>
-    <rect x="-3" y="-50" width="6" height="6" fill="#E41D3D"/>
-  </g></g>
 </svg>'''
 here=os.path.dirname(os.path.abspath(__file__))
 open(os.path.join(here,'..','page','stage.html'),'w').write(art)
